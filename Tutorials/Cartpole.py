@@ -1,3 +1,20 @@
+'''
+Reinforcement Learning DQN Tutorial
+
+OpenAI Gym에서 제공하는 ' cartpole-v0 '을 pytorch를 이용해서 Deep Q-Learning 을 연습한다.
+선택하는 action에는 left || right 두가지가 있으며 cart를 움직이고 pole을 서있을 수 있도록 하는 것이 목표이다. 
+
+다양한 알고리즘과 시각화된 것을 Gym website를 통해 공식적인 리더보드를 확인할 수 있다. 
+
+? 리더보드란 ?
+: List 나 Search의 프로필, 페이지, 계정 그룹이 특정 기간에 어떤 성과를 올리고 있는지 확인할 수 있다. 경쟁사를 분석할 때 유용하다.
+? 언제 사용할까 ?
+모든 페이지, 프로필 또는 계정의 성과를 한 번에 분석할 때
+
+
+
+
+
 import gym
 import math
 import random
@@ -305,3 +322,4 @@ env.close()
 plt.ioff()
 plt.show()
 
+https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html
