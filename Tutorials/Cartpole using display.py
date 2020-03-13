@@ -1,3 +1,8 @@
+##############################################################################################################################
+# 이 Cartpole 은 display에서 보이는 결과에 대한 차이로 학습을 하기때문에 
+# display가 없는 서버나 클라우드에서는 학습이 힘들다는 문제가 있다. 
+##############################################################################################################################
+
 '''
 Reinforcement Learning DQN Tutorial
 
@@ -51,12 +56,12 @@ env = gym.make('CartPole-v0').unwrapped
 # set up matplotlib
 is_ipython = 'inline' in matplotlib.get_backend()   #브라우저에서 그림을 볼 수 있게 바로 그려지도록 해주는 코드
 if is_ipython:
-    from IPython import display
+    from IPython import display             # display 필요! 
 
 plt.ion()   #interative-on
 
 # device가 cpu 인지 gpu인지 확인하는 부분 // 
-# 우리는 gpu를 이용하기 때문에 cpu인 경우는 코드 돌리지 말아야함 
+# 우리는 gpu를 이용하고 싶기 때문에 cpu인 경우는 코드 돌리지 말아야함 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
@@ -82,12 +87,12 @@ Transition = namedtuple('Transition',
 
 #환경에서 단일 전이를 나타내는 명명된 튜플 (State, action) 의 쌍을 (next_state, reward) 결과에 맵핑하며 , 상태는 화면 차이 이미지 
 
-class ReplayMemory(object):     #매개변수 어디에쓰임,,?
+class ReplayMemory(object):     
 
     def __init__(self, capacity):
-        self.capacity = capacity    #?
+        self.capacity = capacity    
         self.memory = []    #과거 경험 저장하는 공간 
-        self.position = 0       #?
+        self.position = 0       
 
     def push(self, *args):
         """Saves a transition."""
@@ -143,7 +148,8 @@ class DQN(nn.Module):
 
 
 ######################################################################
-# Input extraction 입력추출
+# Input extraction 
+# screen 조정 -> display 사용 
 #######################################################################
 
 resize = T.Compose([T.ToPILImage(),
