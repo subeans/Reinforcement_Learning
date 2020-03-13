@@ -64,6 +64,9 @@ if use_cuda:
     model.cuda()
 memory = ReplayMemory(10000)
 optimizer = optim.Adam(model.parameters(), LR)
+#torch.optim.Adam( PARAMS , LR = 0.001 , 베타 = (0.9 , 0.999) , EPS = 1E-08 , weight_decay = 0 , amsgrad = 거짓 )
+# params : 매개변수 그룹 정의를 최적화하거나 지시하기위한 매개변수의 반복 기능, lr : 학습 속도 , 베타 : 그라디언트의 실행 평균 및 제곱의 계산에 사용되는 계수
+# eps : 숫자 안정성을 향상시키기위해 분모에 추가된 항 
 steps_done = 0
 episode_durations = []
 
@@ -73,9 +76,12 @@ def select_action(state):
     sample = random.random()
     eps_threshold = EPS_END + (EPS_START - EPS_END) * math.exp(-1. * steps_done / EPS_DECAY)
     steps_done += 1
-    if sample > eps_threshold:
+    if sample > eps_threshold:  # e보다 크면 model 에서 큰 값을 따르고
         return model(Variable(state, volatile=True).type(FloatTensor)).data.max(1)[1].view(1, 1)
-    else:
+        # Variable () : 모델을 훈련할 때 파라미터를 저장할 변수가 필요하고 메모리에 저장할 수 있도록해주는 것
+        # gradient 가 필요한 input 인 경우, output도 gradient가 필요하므로 backward연산을 해야하고 
+        # input output 둘 다 gradient가 필요없는 경우는 backward 연산은 이루어지지 않는다. 
+    else:       # e보다 작으면 random한 값을 사용한다 
         return LongTensor([[random.randrange(2)]])
 
 
@@ -116,7 +122,8 @@ def learn():
     # random transition batch is taken from experience replay memory
     transitions = memory.sample(BATCH_SIZE)
     batch_state, batch_action, batch_next_state, batch_reward = zip(*transitions)
-
+    
+    #복수의 tensor을 결합할때 torch.cat
     batch_state = Variable(torch.cat(batch_state))
     batch_action = Variable(torch.cat(batch_action))
     batch_reward = Variable(torch.cat(batch_reward))
