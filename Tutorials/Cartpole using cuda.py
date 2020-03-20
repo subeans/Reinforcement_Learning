@@ -10,14 +10,16 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 
 # hyper parameters
-EPISODES = 200  # number of episodes
+EPISODES = 500  # number of episodes
 EPS_START = 0.9  # e-greedy threshold start value
 EPS_END = 0.05  # e-greedy threshold end value
 EPS_DECAY = 200  # e-greedy threshold decay
-GAMMA = 0.8  # Q-learning discount factor
+GAMMA = 0.99  # Q-learning discount factor
 LR = 0.001  # NN optimizer learning rate
 HIDDEN_LAYER = 256  # NN hidden layer size
-BATCH_SIZE = 64  # Q-learning batch size
+BATCH_SIZE = 32  # Q-learning batch size
+
+#batch_size , gamma , learning rate 가 RL에 영향 
 
 # if gpu is to be used
 use_cuda = torch.cuda.is_available()
@@ -56,13 +58,14 @@ class Network(nn.Module):
         return x
         
        
-env = gym.make('CartPole-v0')
+env = gym.make('CartPole-v1')
 #env = wrappers.Monitor(env, './tmp/cartpole-v0-1')
 
 model = Network()
 if use_cuda:
     model.cuda()
-memory = ReplayMemory(10000)
+memory = ReplayMemory(1000)
+#ReplayMemory의 capacity 의 크기에 따라 RL이 잘이루어지는데 영향 
 optimizer = optim.Adam(model.parameters(), LR)
 #torch.optim.Adam( PARAMS , LR = 0.001 , 베타 = (0.9 , 0.999) , EPS = 1E-08 , weight_decay = 0 , amsgrad = 거짓 )
 # params : 매개변수 그룹 정의를 최적화하거나 지시하기위한 매개변수의 반복 기능, lr : 학습 속도 , 베타 : 그라디언트의 실행 평균 및 제곱의 계산에 사용되는 계수
