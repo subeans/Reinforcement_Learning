@@ -8,6 +8,7 @@ import torch.optim as optim
 from torch.autograd import Variable
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
+import time 
 
 # hyper parameters
 EPISODES = 500  # number of episodes
@@ -16,8 +17,8 @@ EPS_END = 0.05  # e-greedy threshold end value
 EPS_DECAY = 200  # e-greedy threshold decay
 GAMMA = 0.99  # Q-learning discount factor
 LR = 0.001  # NN optimizer learning rate
-HIDDEN_LAYER = 256  # NN hidden layer size
-BATCH_SIZE = 32  # Q-learning batch size
+HIDDEN_LAYER = 128  # NN hidden layer size
+BATCH_SIZE = 64  # Q-learning batch size
 
 #batch_size , gamma , learning rate 가 RL에 영향 
 
@@ -162,10 +163,13 @@ def plot_durations():
         plt.plot(means.numpy())
 
     plt.pause(0.001)  # pause a bit so that plots are updated
-       
+
+start_time=time.time()
 for e in range(EPISODES):
     run_episode(e, env)
 
+end_time=time.time()
+print("Working time : {} sec".format(end_time-start_time))
 print('Complete')
 #env.render(close=True)
 env.close()
