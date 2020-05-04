@@ -5,7 +5,7 @@ import time
 import mxnet as mx
 import numpy as np
 import random
-from utilities import *
+from cartpole_utilities import *
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
